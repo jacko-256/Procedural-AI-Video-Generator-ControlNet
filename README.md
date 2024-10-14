@@ -1,11 +1,10 @@
-![GIF FAILED TO LOAD :(](./git/video1.gif)
+<video width="400" controls>
+  <source src="./git/video1.mp4" type="video/mp4">
+  <source src="./git/video1.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>v
 
 # Procedural Video Generator Using ControlNet
-
-<video width="512" height="512" controls>
-  <source src="github_page/" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
 ## Description:
 
