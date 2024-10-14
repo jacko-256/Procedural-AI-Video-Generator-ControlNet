@@ -1,11 +1,11 @@
-### Procedural Video Generator Using ControlNet
+# Procedural Video Generator Using ControlNet
 
 <video width="512" height="512" controls>
   <source src="github_page/My Movie.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
-# Description:
+## Description:
 
 This project allows users to easily generate a video that transitions from a seed image that the user inputs to the prompts the user gives using ControlNet.
 
@@ -41,7 +41,7 @@ The denoising strength parameter also increases by 0.01 every 2 frames until the
 
 This is all ran through the terminal. The models I use are already in the correct folders, and if you would like to make changes to the video generation, the script is videoGenerator.py. 
 
-# Styles Guide:
+## Styles Guide:
 
 There are also style presets you can use by typing out the number of the style you would like to use. All of the style presets and their effects are shown below:
   1. Dadaism
@@ -58,7 +58,7 @@ There are also style presets you can use by typing out the number of the style y
   12. Abstractism Wassily Kandinsky
   13. Jean-Michel Basquiat
 
-# Results:
+## Results:
 
 Here are some cool results I've seen from generating videos!
 
@@ -72,7 +72,7 @@ As you can see, there is a pretty seamless transition between each frame, making
 
 [will add more in the coming days]
 
-# How to Run / Other Details:
+## How to Run / Other Details:
 
 For me, it takes around 30 seconds to generate one frame (30 steps, 512x512), which is incredibly slow and takes a few hours to render about a minute-long video. I hope this is because ControlNet and Simple Diffusion are very unoptimized for ARM chips. This hypothesis is supported by the fact that my activity monitor shows I only use around 10% of my CPU when rendering video and all apps (except Activity Monitor, VSCode, and Terminal) are closed. Maybe it is way faster on Windows, but I have no idea because I don't have a Windows computer.
 
