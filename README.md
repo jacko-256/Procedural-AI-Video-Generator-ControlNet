@@ -72,7 +72,18 @@ As you can see, there is a pretty seamless transition between each frame, making
 
 [will add more in the coming days]
 
-## How to Run / Other Details:
+## Installation Guide:
+
+ 1. First download ControlNet from [this git link](https://github.com/lllyasviel/ControlNet) and put it in a folder of your choosing.
+ 2. Install Automatic1111 (see guide [here](https://github.com/viking1304/a1111-setup/discussions/2)).
+ 3. Run the command "cd ControlNet directory path" (this is the command for MacOS, may be different for windows).
+ 4. Open the webui by running the command "stable-diffusion-webui/webui.sh".
+ 5. Navigate to the extensions tab and then go to the "Install from URL" tab.
+ 6. Paste [this URL](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git) into the field and press install and reload UI.
+ 7. Download the HED model [here](https://huggingface.co/lllyasviel/ControlNet/tree/main/models) and place it in the folder: "stable-diffusion-webui/extensions/sd-webui-controlnet/models", then place another instance in the "models" folder.
+ 8. Finally, place the videoGenerator.py file into the ControlNet folder (not in any subfolders within it) and your file is ready to run!
+
+### Other Details:
 
 For me, it takes around 30 seconds to generate one frame (30 steps, 512x512), which is incredibly slow and takes a few hours to render about a minute-long video. I hope this is because ControlNet and Simple Diffusion are very unoptimized for ARM chips. This hypothesis is supported by the fact that my activity monitor shows I only use around 10% of my CPU when rendering video and all apps (except Activity Monitor, VSCode, and Terminal) are closed. Maybe it is way faster on Windows, but I have no idea because I don't have a Windows computer.
 
