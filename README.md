@@ -2,7 +2,7 @@
   <source src="./git/video1.mp4" type="video/mp4">
   <source src="./git/video1.webm" type="video/webm">
   Your browser does not support the video tag.
-</video>v
+</video>
 
 # Procedural Video Generator Using ControlNet
 
