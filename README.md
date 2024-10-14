@@ -1,2 +1,83 @@
-# Procedural-AI-Video-Generator-ControlNet
-Uses the ControlNet framework to generate frame-by-frame videos that slowly transition between the prompts you give.
+### Procedural Video Generator Using ControlNet
+
+<video width="512" height="512" controls>
+  <source src="github_page/My Movie.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+# Description:
+
+This project allows users to easily generate a video that transitions from a seed image that the user inputs to the prompts the user gives using ControlNet.
+
+It does this by first taking your input image the prompt you give, and making the image look a little bit more like the prompt. It then repeats this process, taking the last frame and making it look more like the prompt frame by frame until a video emerges.
+
+After you input the seed image, you are asked to type in:
+  - prompts you want the AI to lean towards
+  - styles that you want the AI to lean towards
+  - in what time intervals you want the AI to use what prompt/style
+  - Denoising strength
+  - Frames per second
+  - Steps
+  - Resolution
+
+The video generator makes a list of the prompts, styles, duration, and noise amplifiers that you want to use in order and implements them into video. For instance, if I input the parameters:
+  - Prompt 1: Black hole acretion disc
+  - Style 1: Dadaism, Cubism, Photorealism
+  - Denoising Strength 1: 0.4 (default value)
+  - Duration 1: 8 (seconds)
+  - Prompt 2: Nighttime Blade Runner 2049 city
+  - Style 2: Japanese Print Art, Surrealism, Impressionism
+  - Denoising Strength 2: 0.6
+  - Duration 2: 4 (seconds)
+
+What this will do is create a video that begins with the input image you give, and every frame, becomes more and more like the prompt and style you give. For the first 8 seconds, your image will transition into a black hole acretion disc in a Dadaism, Cubism, Photorealism style with a noise value of 0.4, and after that the last generated frame will transition into a nighttime Blade Runner 2049 city styled like Japanese Print Art, Surrealism, and Impressionism for 4 seconds with a noise value of 0.6.
+
+The other parameters that are given to the generator are shown below:
+  - Prompt: Very detailed, photo-realistic quality. Transition image into an image of a [insert user prompt] as if it were the next frame in a video. Slightly more [insert user style]
+  - Negative_prompt: Change image. Blend quickly and abruptly. Blurry and fuzzy. Simple.
+  - CFG Scale: 25
+
+The denoising strength parameter also increases by 0.01 every 2 frames until the next set of parameters takes over. The first frame of the video also has a denoising strength -0.05 less than inputed to avoid abrupt changes.
+
+This is all ran through the terminal. The models I use are already in the correct folders, and if you would like to make changes to the video generation, the script is videoGenerator.py. 
+
+# Styles Guide:
+
+There are also style presets you can use by typing out the number of the style you would like to use. All of the style presets and their effects are shown below:
+  1. Dadaism
+  2. Cubism
+  3. Transcendental Painting Group
+  4. Japanese Print Art
+  5. Impressionism
+  6. Constructivism
+  7. Fauvism
+  8. Futurism
+  9. Photorealism
+  10. Surrealism
+  11. Academic Art
+  12. Abstractism Wassily Kandinsky
+  13. Jean-Michel Basquiat
+
+# Results:
+
+Here are some cool results I've seen from generating videos!
+
+File path is AIVideoGenerator/github_page/output_video0.mp4 or view below:
+<video width="512" height="512" controls>
+    <source src="github_page/output_video0.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+As you can see, there is a pretty seamless transition between each frame, making for a very creative yet coherent video. For some reason, the Minecraft section was very cursed, so I would recommend against using prompts similar to that.
+
+[will add more in the coming days]
+
+# How to Run / Other Details:
+
+For me, it takes around 30 seconds to generate one frame (30 steps, 512x512), which is incredibly slow and takes a few hours to render about a minute-long video. I hope this is because ControlNet and Simple Diffusion are very unoptimized for ARM chips. This hypothesis is supported by the fact that my activity monitor shows I only use around 10% of my CPU when rendering video and all apps (except Activity Monitor, VSCode, and Terminal) are closed. Maybe it is way faster on Windows, but I have no idea because I don't have a Windows computer.
+
+Also for some reason sometimes after the program finishes, Activity Monitor still shows it is still active. This can be a huge problem when you run the program dozens of times while testing and since each program takes up around 5GB of RAM, I ended up maxing out my 16GB of memory and used 58GB of swap before my computer crashed lol. Just be sure to occasionally check if any extra python programs are running.
+
+When completed, the file will package itself as a ZIP file in the output-zips folder named with the date and time it was created. The ZIP file will contain a .mp4 and .gif of the video, all of the frames as .pngs, and .txt file of the parameters used. You can also view the frames as they are generating in the output folder.
+
+This is one my first actual coding projects and my first time ever using github so please let me know if I'm making any rookie mistakes or have any feedback in any way. Thank you!
