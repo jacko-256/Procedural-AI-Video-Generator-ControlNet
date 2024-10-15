@@ -44,17 +44,17 @@ This is all ran through the terminal. The models I use are already in the correc
 ## Styles Guide:
 
 There are also style presets you can use by typing out the number of the style you would like to use. All of the style presets and their effects are shown below:
-  1. Dadaism - This creates absolute chaos, however somehow it is pretty coherent and leads to some amazing emerging patterns and images.
-  2. Cubism - This is very similar to Dadaism, but slightly less abstract.
-  3. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
-  4. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
+  1. Photorealism - This is a great tag because it just makes the image look more realistic and less stylized.
+  2. Academic Art - This creates a style similar to School of Athens and other classical paintings that are realistic yet have their own style.
+  3. Surrealism - Creates really cool and trippy images without sacrificing much coherence or image quality.
+  4. Cubism - This is very similar to Dadaism, but slightly less abstract.
   5. Impressionism - This creates cool, stylized images at the cost of sharpness. Can often create blurry and incoherent results, but when it works its amazing.
-  6. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
-  7. Fauvism - Creates Impressionistic effects but makes everything more colorful and blocky.
-  8. Futurism - Very colorful and similar to Impressionism except detail is much richer and sharper.
-  9. Photorealism - This is a great tag because it just makes the image look more realistic and less stylized.
-  10. Surrealism - Creates really cool and trippy images without sacrificing much coherence or image quality.
-  11. Academic Art - This creates a style similar to School of Athens and other classical paintings that are realistic yet have their own style.
+  6. Fauvism - Creates Impressionistic effects but makes everything more colorful and blocky.
+  7. Futurism - Very colorful and similar to Impressionism except detail is much richer and sharper.
+  8. Dadaism - This creates absolute chaos, however somehow it is pretty coherent and leads to some amazing emerging patterns and images.
+  9. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
+  10. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
+  11. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
   12. Abstractism Wassily Kandinsky - 
   13. Jean-Michel Basquiat - This style is very incoherent and is often a jumbled mess, however depending on what you want it can be nice if you want extremely stylized and artistic images that don't make any sense.
 
