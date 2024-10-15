@@ -46,7 +46,7 @@ This is all ran through the terminal. The models I use are already in the correc
 There are also style presets you can use by typing out the number of the style you would like to use. All of the style presets and their effects are shown below:
   1. Dadaism - This creates absolute chaos, however somehow it is pretty coherent and leads to some amazing emerging patterns and images.
   2. Cubism - This is very similar to Dadaism, but slightly less abstract.
-  3. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here]()
+  3. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
   4. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
   5. Impressionism - This creates cool, stylized images at the cost of sharpness. Can often create blurry and incoherent results, but when it works its amazing.
   6. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
