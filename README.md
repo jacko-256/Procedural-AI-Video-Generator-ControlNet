@@ -12,9 +12,9 @@ This project allows users to easily generate a video that transitions from a see
 It does this by first taking your input image the prompt you give, and making the image look a little bit more like the prompt. It then repeats this process, taking the last frame and making it look more like the prompt frame by frame until a video emerges.
 
 After you input the seed image, you are asked to type in:
-  - prompts you want the AI to lean towards
-  - styles that you want the AI to lean towards
-  - in what time intervals you want the AI to use what prompt/style
+  - Prompts you want the AI to lean towards
+  - Styles that you want the AI to lean towards
+  - In what time intervals you want the AI to use what prompt/style
   - Denoising strength
   - Frames per second
   - Steps
