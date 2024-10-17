@@ -288,20 +288,21 @@ def open_video_system_player(video_path):
         os.startfile(video_path)
     elif system == "Linux":  # Linux
         subprocess.call(["xdg-open", video_path])
-    subprocess.run([
-        "ffmpeg",
-        "-framerate", str(fps),
-        "-i", "output/frames/frame_%d.png",
-        "-c:v", "libx264", 
-        "-preset", "fast",
-        "-crf", "20",
-        "-pix_fmt", "yuv420p",
-        "-c:a", "aac",
-        "-b:a", "192k",
-        "-movflags", "+faststart",
-        "-loglevel", "quiet",
-        "output/output_video.mp4"
-    ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, )
+    
+subprocess.run([
+    "ffmpeg",
+    "-framerate", str(fps),
+    "-i", "output/frames/frame_%d.png",
+    "-c:v", "libx264", 
+    "-preset", "fast",
+    "-crf", "20",
+    "-pix_fmt", "yuv420p",
+    "-c:a", "aac",
+    "-b:a", "192k",
+    "-movflags", "+faststart",
+    "-loglevel", "quiet",
+    "output/output_video.mp4"
+], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, )
 print("Video generated!")
 
 subprocess.run([
