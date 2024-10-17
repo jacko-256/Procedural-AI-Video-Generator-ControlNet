@@ -78,12 +78,16 @@ As you can see, there is a pretty seamless transition between each frame, making
 
  1. First download ControlNet from [this git link](https://github.com/lllyasviel/ControlNet) and put it in a folder of your choosing.
  2. Install Automatic1111 (see guide [here](https://github.com/viking1304/a1111-setup/discussions/2)).
- 3. Run the command "cd ControlNet directory path" (this is the command for MacOS, may be different for windows).
- 4. Open the webui by running the command "stable-diffusion-webui/webui.sh".
- 5. Navigate to the extensions tab and then go to the "Install from URL" tab.
- 6. Paste [this URL](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git) into the field and press install and reload UI.
- 7. Download the HED model [here](https://huggingface.co/lllyasviel/ControlNet/tree/main/models) and place it in the folder: "stable-diffusion-webui/extensions/sd-webui-controlnet/models", then place another instance in the "models" folder.
- 8. Finally, place the videoGenerator.py file into the ControlNet folder (not in any subfolders within it) and your file is ready to run!
+ 3. Run these commands in the terminal:
+    '''cd [path-to-folder]
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    pip install requests pillow ffmpeg-python
+    brew install ffmpeg'''
+ 5. Open the webui by running the command "stable-diffusion-webui/webui.sh".
+ 6. Navigate to the extensions tab and then go to the "Install from URL" tab.
+ 7. Paste [this URL](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git) into the field and press install and reload UI.
+ 8. Download the HED model [here](https://huggingface.co/lllyasviel/ControlNet/tree/main/models) and place it in the folder: "stable-diffusion-webui/extensions/sd-webui-controlnet/models", then place another instance in the "models" folder.
+ 9. Finally, place the videoGenerator.py file into the ControlNet folder (not in any subfolders within it) and your file is ready to run!
 
 ### Other Details:
 
