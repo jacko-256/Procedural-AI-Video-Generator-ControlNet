@@ -79,7 +79,8 @@ As you can see, there is a pretty seamless transition between each frame, making
  1. First download ControlNet from [this git link](https://github.com/lllyasviel/ControlNet) and put it in a folder of your choosing.
  2. Install Automatic1111 (see guide [here](https://github.com/viking1304/a1111-setup/discussions/2)).
  3. Run these commands in the terminal:
-    ```cd [path-to-folder]
+    ```
+    cd [path-to-folder]
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     pip install requests pillow ffmpeg-python
     brew install ffmpeg```
