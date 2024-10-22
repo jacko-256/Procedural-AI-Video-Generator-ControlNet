@@ -136,9 +136,15 @@ def get_seed_path():
     """Get the path to the seed image from the user."""
 
     global image_path
-    image_path = input("Seed image path (leave blank for previous): ")
-    if image_path == "":
-        image_path = "output/frames/frame_0.png"
+    input("Enter seed image in folder window. Press enter when done.")
+
+    for file in os.listdir('input'):
+        full_path = os.path.join('input', file)
+        if os.path.isfile(full_path):
+            image_path = full_path
+    
+    print(f"Seed image file name: {os.path.basename(image_path)}")
+
 
 def get_resolution():
     """Get the desired resolution for the generated images from the user."""
