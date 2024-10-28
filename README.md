@@ -58,13 +58,12 @@ There are also style presets you can use by typing out the number of the style y
   4. Cubism - This is very similar to Dadaism, but slightly less abstract.
   5. Impressionism - This creates cool, stylized images at the cost of sharpness. Can often create blurry and incoherent results, but when it works its amazing.
   6. Fauvism - Creates Impressionistic effects but makes everything more colorful and blocky.
-  7. Futurism - Very colorful and similar to Impressionism except detail is much richer and sharper.
-  8. Dadaism - This creates absolute chaos, however somehow it is pretty coherent and leads to some amazing emerging patterns and images.
-  9. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
-  10. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
-  11. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
-  12. Abstractism Wassily Kandinsky - Very rough yet detailed style in between Basquiat and Constructivism
-  13. Jean-Michel Basquiat - This style is very incoherent and is often a jumbled mess, however depending on what you want it can be nice if you want extremely stylized and artistic images that don't make any sense.
+  7. Dadaism - This creates absolute chaos, however somehow it is pretty coherent and leads to some amazing emerging patterns and images.
+  8. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
+  9. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
+  10. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
+  11. Abstractism Wassily Kandinsky - Very rough yet detailed style in between Basquiat and Constructivism
+  12. Jean-Michel Basquiat - This style is very incoherent and is often a jumbled mess, however depending on what you want it can be nice if you want extremely stylized and artistic images that don't make any sense.
 
 It is advised to use 1-3 styles, because too many styles may cause clashes and incoherence.
 
@@ -77,7 +76,6 @@ Here are GIFs of each style with the prompt: black hole acretion disc. Styles in
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh4.GIF?raw=true" alt="" width="200"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh5.GIF?raw=true" alt="" width="200"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh6.GIF?raw=true" alt="" width="200"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh7.GIF?raw=true" alt="" width="200"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh8.GIF?raw=true" alt="" width="200"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh9.GIF?raw=true" alt="" width="200"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh10.gif?raw=true" alt="" width="200"/>
