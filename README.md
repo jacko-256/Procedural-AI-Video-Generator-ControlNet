@@ -96,7 +96,8 @@ Here are some other cool results from this project! Files can be found in the "g
     cd [path-to-folder]
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     pip install requests pillow ffmpeg-python
-    brew install ffmpeg```
+    brew install ffmpeg
+    ```
  5. Open the webui by running the command "stable-diffusion-webui/webui.sh".
  6. Navigate to the extensions tab and then go to the "Install from URL" tab.
  7. Paste [this URL](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git) into the field and press install and reload UI.
