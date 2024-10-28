@@ -72,7 +72,7 @@ File path is AIVideoGenerator/github_page/output_video0.mp4 or view below:
 
 As you can see, there is a pretty seamless transition between each frame, making for a very creative yet coherent video. For some reason, the Minecraft section was very cursed, so I would recommend against using prompts similar to that.
 
-[will add more in the coming days]
+
 
 ## Installation Guide:
 
@@ -92,7 +92,7 @@ As you can see, there is a pretty seamless transition between each frame, making
 
 ### Other Details:
 
-For me, it takes around 30 seconds to generate one frame (30 steps, 512x512), which is incredibly slow and takes a few hours to render about a minute-long video. I hope this is because ControlNet and Simple Diffusion are very unoptimized for ARM chips. This hypothesis is supported by the fact that my activity monitor shows I only use around 10% of my CPU when rendering video and all apps (except Activity Monitor, VSCode, and Terminal) are closed. Maybe it is way faster on Windows, but I have no idea because I don't have a Windows computer. This also runs completely offline!
+For me, it takes around 20 seconds to generate one frame (25 steps, 512x512), which is incredibly slow and takes a few hours to render about a minute-long video. I hope this is because ControlNet and Simple Diffusion are very unoptimized for ARM chips. This hypothesis is supported by the fact that my activity monitor shows I only use around 10% of my CPU when rendering video and all apps (except Activity Monitor, VSCode, and Terminal) are closed. Maybe it is way faster on Windows, but I have no idea because I don't have a Windows computer. This also runs completely offline!
 
 Also for some reason sometimes after the program finishes, Activity Monitor still shows it is still active. This can be a huge problem when you run the program dozens of times while testing and since each program takes up around 5GB of RAM, I ended up maxing out my 16GB of memory and used 58GB of swap before my computer crashed lol. Just be sure to occasionally check if any extra python programs are running.
 
