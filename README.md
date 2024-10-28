@@ -84,7 +84,6 @@ Here are some other cool results I've seen from generating videos!
 
 <div style="display: flex; justify-content: center; gap: 10px;">
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true" alt="" width="300"/>
