@@ -1,7 +1,4 @@
-<div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="https://raw.githubusercontent.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/main/git/og1.GIF" alt="GIF 1" width="400"/>
-    <img src="https://raw.githubusercontent.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/main/git/og2.GIF" alt="GIF 2" width="400"/>
-</div>
+![GIF 1](https://raw.githubusercontent.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/main/git/og1.GIF) ![GIF 2](https://raw.githubusercontent.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/main/git/og2.GIF)
 
 # Procedural Video Generator Using ControlNet
 
