@@ -1,4 +1,4 @@
-![GIF preview is not working :(][https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true]
+![GIF preview is not working](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true)
 
 # Procedural Video Generator Using ControlNet
 
