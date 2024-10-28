@@ -1,0 +1,22 @@
+Date: 2024-10-21_21-39-02
+
+Resolution: 512 x 512
+FPS: 8
+Steps: 30
+Time Elapsed: 1697 seconds
+Video Length: 10 seconds
+Frame Count: 80
+
+Segment 1 Parameters:
+ - Prompt: black hole acretion disc
+ - Style: Surrealism
+ - Noise Amplifier: 0.35
+ - Duration: 6
+
+Segment 2 Parameters:
+ - Prompt: andromeda galaxy
+ - Style: Constructivism, Japanese Print Art
+ - Noise Amplifier: 0.35
+ - Duration: 4
+
+DO NOT EDIT THE NAME OF THIS FILE
