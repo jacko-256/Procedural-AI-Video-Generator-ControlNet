@@ -36,7 +36,7 @@ What this will do is create a video that begins with the input image you give, a
 
 What I mean by incrementation is that every frame will use the previous frame as a reference, as opposed to using the original seed image. When disabled, it can yield results like:
 
-<div style="display: flex; justify-content: center; gap: 10px;">
+<div align="center">
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/no_increment.gif?raw=true" alt="GIF 2" width="300"/>
 </div>
 
