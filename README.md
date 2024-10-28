@@ -67,7 +67,7 @@ There are also style presets you can use by typing out the number of the style y
 
 It is advised to use 1-3 styles, because too many styles may cause clashes and incoherence.
 
-Here are GIFs of each style with the prompt: black hole acretion disc. Styles incerement from left to right. Top left is style 1, the one on the right of it is 2, and so on.
+Here are GIFs of each style with the prompt: black hole acretion disc. Styles increment from left to right. Top left is style 1, the one on the right of it is 2, and so on.
 
 <div align="center">
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/output.gif?raw=true" alt="" width="1000"/>
