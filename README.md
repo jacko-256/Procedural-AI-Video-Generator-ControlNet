@@ -19,7 +19,7 @@ After you input the seed image, you are asked to type in:
   - Frames per second
   - Steps
   - Resolution
-  - Increment: (Y/N)
+  - Increment
 
 The video generator makes a list of the prompts, styles, duration, and noise amplifiers that you want to use in order and implements them into video. For instance, if I input the parameters:
   - Prompt 1: Black hole acretion disc
