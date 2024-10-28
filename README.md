@@ -40,8 +40,6 @@ What I mean by incrementation is that every frame will use the previous frame as
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/no_increment.gif?raw=true" alt="GIF 2" width="300"/>
 </div>
 
-
-
 The other parameters that are given to the generator are shown below:
   - Prompt: Very detailed, photo-realistic quality. Transition image into an image of a [insert user prompt] as if it were the next frame in a video. Slightly more [insert user style]
   - Negative_prompt: Change image. Blend quickly and abruptly. Blurry and fuzzy. Simple.
