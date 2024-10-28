@@ -63,19 +63,19 @@ It is advised to use 1-3 styles, because too many styles may cause clashes and i
 Here are GIFs of each style with the prompt: black hole acretion disc.
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh1.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh2.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh3.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh4.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh5.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh6.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh7.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh8.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh9.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh10.gif?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh11.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh12.GIF?raw=true" alt="" width="220"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh13.GIF?raw=true" alt="" width="220"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh1.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh2.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh3.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh4.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh5.GIF?raw=true" alt="" width="200"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh6.GIF?raw=true" alt="" width="200"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh7.GIF?raw=true" alt="" width="200"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh8.GIF?raw=true" alt="" width="200"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh9.GIF?raw=true" alt="" width="200"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh10.gif?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh11.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh12.GIF?raw=true" alt="" width="250"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh13.GIF?raw=true" alt="" width="250"/>
 </div>
 
 ## Results:
