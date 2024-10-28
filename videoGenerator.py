@@ -445,4 +445,9 @@ def main():
     open_video_system_player()
     stop_local_server(False)
 
-main()
+while True:
+    main()
+    if input("Press enter to use again, or press any key to exit."):
+        break
+print("Thanks for using!")
+exit()
