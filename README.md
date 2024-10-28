@@ -1,7 +1,4 @@
-<video width="400" controls>
-  <source src="./git/video1.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![GIF preview is not working :(][https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true]
 
 # Procedural Video Generator Using ControlNet
 
