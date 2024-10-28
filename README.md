@@ -1,4 +1,7 @@
-![GIF preview is not working](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true) ![GIF preview is not working](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/real_bh.GIF?raw=true)
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" alt="GIF 1" style="width: 45%;"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/real_bh.GIF?raw=true" alt="GIF 2" style="width: 45%;"/>
+</div>
 
 # Procedural Video Generator Using ControlNet
 
