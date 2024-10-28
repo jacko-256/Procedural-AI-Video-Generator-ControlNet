@@ -55,8 +55,30 @@ There are also style presets you can use by typing out the number of the style y
   9. Transcendental Painting Group - This is a minimalist yet breathtaking style that creates some abstract and stylized results. The AI doesn't weigh this input very high so the effects won't be too dramatic. Some famous art from the movement can be found [here](https://www.lacma.org/art/exhibition/another-world)
   10. Japanese Print Art - This style creates defined line art and very stylized and colorful images at the cost of coherence and realism. When using this tag, the image is very abstract and will almost never produce a realistic result.
   11. Constructivism - Very abstract yet minimalist that sacrifices coherence for trippy effects.
-  12. Abstractism Wassily Kandinsky - 
+  12. Abstractism Wassily Kandinsky - Very rough yet detailed style in between Basquiat and Constructivism
   13. Jean-Michel Basquiat - This style is very incoherent and is often a jumbled mess, however depending on what you want it can be nice if you want extremely stylized and artistic images that don't make any sense.
+
+Here are GIFs of each style with the prompt: black hole acretion disc.
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh1.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh2.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh3.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh4.GIF?raw=true" alt="" width="256"/>
+</div>
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh5.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh6.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh7.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh8.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh9.GIF?raw=true" alt="" width="256"/>
+</div>
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh10.gif?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh11.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh12.GIF?raw=true" alt="" width="256"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh13.GIF?raw=true" alt="" width="256"/>
+</div>
 
 It is advised to use 2-3 styles, maybe 4 if they are similar, but too many styles may cause clashes and incoherence.
 
@@ -64,11 +86,7 @@ It is advised to use 2-3 styles, maybe 4 if they are similar, but too many style
 
 Here are some cool results I've seen from generating videos!
 
-File path is AIVideoGenerator/github_page/output_video0.mp4 or view below:
-<video width="512" height="512" controls>
-    <source src="github_page/output_video0.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+
 
 As you can see, there is a pretty seamless transition between each frame, making for a very creative yet coherent video. For some reason, the Minecraft section was very cursed, so I would recommend against using prompts similar to that.
 
