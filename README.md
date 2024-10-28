@@ -1,5 +1,5 @@
 <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" alt="GIF 2" width="400"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="GIF 2" width="400"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/real_bh.GIF?raw=true" alt="GIF 1" width="400"/>
 </div>
 
@@ -83,15 +83,13 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 Here are some other cool results I've seen from generating videos!
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true" alt="" width="300"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.GIF?raw=true" alt="" width="300"/>
 </div>
-
-As you can see, there is a pretty seamless transition between each frame, making for a very creative yet coherent video. For some reason, the Minecraft section was very cursed, so I would recommend against using prompts similar to that.
-
 
 
 ## Installation Guide:
