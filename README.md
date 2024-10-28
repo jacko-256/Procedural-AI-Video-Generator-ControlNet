@@ -93,8 +93,8 @@ Here are some other cool results from this project! Files can be found in the "g
 
 <div style="display: flex; justify-content: center; gap: 10px;">
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.gif?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.gif?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.gif?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.gif?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.gif?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.gif?raw=true" width="300"/>
