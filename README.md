@@ -1,4 +1,4 @@
-<div style="display: flex; justify-content: center; gap: 10px;">
+<div align="center">
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="GIF 2" width="400"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/real_bh.GIF?raw=true" alt="GIF 1" width="400"/>
 </div>
@@ -90,7 +90,7 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 
 Here are some other cool results from this project! Files can be found in the "git" folder in the main branch.
 
-<div style="display: flex; justify-content: center; gap: 10px;">
+<div align="center">
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.gif?raw=true" width="300"/>
   <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.gif?raw=true" width="300"/>
