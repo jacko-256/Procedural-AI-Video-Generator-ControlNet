@@ -19,6 +19,7 @@ After you input the seed image, you are asked to type in:
   - Frames per second
   - Steps
   - Resolution
+  - Increment: (Y/N)
 
 The video generator makes a list of the prompts, styles, duration, and noise amplifiers that you want to use in order and implements them into video. For instance, if I input the parameters:
   - Prompt 1: Black hole acretion disc
@@ -29,8 +30,15 @@ The video generator makes a list of the prompts, styles, duration, and noise amp
   - Style 2: Japanese Print Art, Surrealism, Impressionism
   - Denoising Strength 2: 0.6
   - Duration 2: 4 (seconds)
+  - Increment: True
 
 What this will do is create a video that begins with the input image you give, and every frame, becomes more and more like the prompt and style you give. For the first 8 seconds, your image will transition into a black hole acretion disc in a Dadaism, Cubism, Photorealism style with a noise value of 0.4, and after that the last generated frame will transition into a nighttime Blade Runner 2049 city styled like Japanese Print Art, Surrealism, and Impressionism for 4 seconds with a noise value of 0.6.
+
+What I mean by incrementation is that every frame will use the previous frame as a reference, as opposed to using the original seed image. When disabled, it can yield results like:
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/no_increment.GIF?raw=true" alt="GIF 2" width="300"/>
+</div>
 
 The other parameters that are given to the generator are shown below:
   - Prompt: Very detailed, photo-realistic quality. Transition image into an image of a [insert user prompt] as if it were the next frame in a video. Slightly more [insert user style]
@@ -80,14 +88,7 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 
 ## Results:
 
-Here are some other cool results I've seen from generating videos!
-
-![GIF 1](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true)
-![GIF 2](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true)
-![GIF 3](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true)
-![GIF 4](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true)
-![GIF 5](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true)
-![GIF 6](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.GIF?raw=true)
+More cool examples are located in the GALLERY.md file. Github does not allow more than 16 gifs to be rendered in one README so I need to use a separate file.
 
 
 ## Installation Guide:
