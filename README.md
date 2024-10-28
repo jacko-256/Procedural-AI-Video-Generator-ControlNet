@@ -89,7 +89,16 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 
 ## Results:
 
-More cool examples are located in the GALLERY.md file [here](GALLERY.md). Github does not allow more than 16 gifs to be rendered in one README so I need to use a separate file.
+Here are some other cool results from this project! Files can be found in the "git" folder in the main branch.
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.gif?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.gif?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.gif?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.gif?raw=true" width="300"/>
+  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.gif?raw=true" width="300"/>
+</div>
 
 
 ## Installation Guide:
