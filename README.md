@@ -58,6 +58,8 @@ There are also style presets you can use by typing out the number of the style y
   12. Abstractism Wassily Kandinsky - Very rough yet detailed style in between Basquiat and Constructivism
   13. Jean-Michel Basquiat - This style is very incoherent and is often a jumbled mess, however depending on what you want it can be nice if you want extremely stylized and artistic images that don't make any sense.
 
+It is advised to use 1-3 styles, because too many styles may cause clashes and incoherence.
+
 Here are GIFs of each style with the prompt: black hole acretion disc.
 
 <div style="display: flex; justify-content: center; gap: 10px;">
@@ -76,13 +78,18 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh13.GIF?raw=true" alt="" width="220"/>
 </div>
 
-It is advised to use 2-3 styles, maybe 4 if they are similar, but too many styles may cause clashes and incoherence.
-
 ## Results:
 
-Here are some cool results I've seen from generating videos!
+Here are some other cool results I've seen from generating videos!
 
-
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true" alt="" width="300"/>
+    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.GIF?raw=true" alt="" width="300"/>
+</div>
 
 As you can see, there is a pretty seamless transition between each frame, making for a very creative yet coherent video. For some reason, the Minecraft section was very cursed, so I would recommend against using prompts similar to that.
 
