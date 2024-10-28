@@ -70,7 +70,7 @@ It is advised to use 1-3 styles, because too many styles may cause clashes and i
 
 Here are GIFs of each style with the prompt: black hole acretion disc.
 
-<div style="display: flex; justify-content: center; gap: 10px;">
+<div align="center">
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh1.GIF?raw=true" alt="" width="240"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh2.GIF?raw=true" alt="" width="240"/>
     <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bh3.GIF?raw=true" alt="" width="240"/>
