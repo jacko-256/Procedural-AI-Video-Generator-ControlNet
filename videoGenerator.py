@@ -13,7 +13,7 @@ import psutil # type: ignore
 # region CHANGE PARAMETERS
 
 cfg_scale = 25  # Configuration scale for image generation
-style_presets = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Futurism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
+style_presets = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
 default_denoising_strength = 0.35  # Default denoising strength for image generation
 default_fps = 8  # Default frames per second for video generation
 default_steps = 30  # Default number of steps for image generation
