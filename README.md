@@ -82,14 +82,12 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 
 Here are some other cool results I've seen from generating videos!
 
-<div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true" alt="" width="300"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.GIF?raw=true" alt="" width="300"/>
-</div>
+![GIF 1](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true)
+![GIF 2](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.GIF?raw=true)
+![GIF 3](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.GIF?raw=true)
+![GIF 4](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.GIF?raw=true)
+![GIF 5](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.GIF?raw=true)
+![GIF 6](https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.GIF?raw=true)
 
 
 ## Installation Guide:
