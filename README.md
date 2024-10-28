@@ -89,7 +89,7 @@ Here are GIFs of each style with the prompt: black hole acretion disc.
 
 ## Results:
 
-More cool examples are located in the GALLERY.md file. Github does not allow more than 16 gifs to be rendered in one README so I need to use a separate file.
+More cool examples are located in the GALLERY.md file [here](GALLERY.md). Github does not allow more than 16 gifs to be rendered in one README so I need to use a separate file.
 
 
 ## Installation Guide:
