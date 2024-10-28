@@ -14,9 +14,9 @@ import psutil # type: ignore
 
 cfg_scale = 25  # Configuration scale for image generation
 style_presets = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Futurism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
-default_denoising_strength = 0.4  # Default denoising strength for image generation
+default_denoising_strength = 0.35  # Default denoising strength for image generation
 default_fps = 8  # Default frames per second for video generation
-default_steps = 25  # Default number of steps for image generation
+default_steps = 30  # Default number of steps for image generation
 default_resolution = "512 x 512"  # Default resolution for generated images
 default_duration = 5
 output_path = "output-zips"  # Path where the output video will be saved
@@ -67,7 +67,6 @@ def find_existing_server():
     """Check if an existing ControlNet server is running."""
     for process in psutil.process_iter(['pid', 'name', 'cmdline']):
         try:
-            # Ensure cmdline is a list before checking
             cmdline = process.info.get('cmdline', [])
             if cmdline and 'webui.sh' in cmdline:
                 return process
@@ -79,33 +78,29 @@ def stop_local_server():
     """Stop any running ControlNet server."""
     global server_process
 
-    # Check if there is an existing process
     existing_process = find_existing_server()
 
     if existing_process:
         try:
-            existing_process.terminate()  # Gracefully terminate
-            existing_process.wait(timeout=10)  # Wait for the process to exit
+            existing_process.terminate()
+            existing_process.wait(timeout=10)
         except (psutil.NoSuchProcess, psutil.TimeoutExpired):
-            # Forcefully kill the process if it doesn't terminate
             print("Server did not stop gracefully, forcing shutdown.")
             existing_process.kill()
         print(f"Stopped ControlNet Server.")
     else:
         print("No existing server found.")
     
-    server_process = None  # Reset the process to None after it's stopped
+    server_process = None
 
 def start_local_server():
     """Start the local ControlNet server for image generation."""
     global server_process, date
 
-    # Stop any existing server before starting a new one
     stop_local_server()
 
     date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    # Start the new server process
     server_command = ["./stable-diffusion-webui/webui.sh", "--api"]
     server_process = subprocess.Popen(server_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print("Starting the ControlNet server...")
@@ -389,9 +384,10 @@ def output():
 
     print(f"GIF generated!")
 
-def open_video_system_player(video_path):
+def open_video_system_player():
     """Open the generated video in the default system player based on the OS."""
 
+    video_path = "output/output_video.mp4"
     system = platform.system()
     if system == "Darwin":
         subprocess.call(["open", video_path])
@@ -444,7 +440,7 @@ def main():
     generate_images()
     output()
     create_text_file()
-    zip_folder("output","output-zips")
+    zip_folder("output",f"output-zips/{date}")
     open_directory()
     open_video_system_player()
     stop_local_server(False)
