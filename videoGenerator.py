@@ -12,23 +12,22 @@ import psutil # type: ignore
 
 # region CHANGE PARAMETERS
 
-cfg_scale = 25  # Configuration scale for image generation
-style_presets = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
-default_denoising_strength = 0.35  # Default denoising strength for image generation
-default_fps = 8  # Default frames per second for video generation
-default_steps = 30  # Default number of steps for image generation
-default_resolution = "512 x 512"  # Default resolution for generated images
-default_duration = 5
-output_path = "output-zips"  # Path where the output video will be saved
+CFG_SCALE = 25  # Configuration scale for image generation
+STYLE_PRESETS = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Futurism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
+DEFAULT_DENOISING_STRENGTH = 0.45  # Default denoising strength for image generation
+DEFAULT_FPS = 8  # Default frames per second for video generation
+DEFAULT_STEPS = 30  # Default number of steps for image generation
+DEFAULT_RESOLUTION = "512 x 512"  # Default resolution for generated images
+DEFAULT_DURATION = 5
+OUTPUT_PATH = "output-zips"  # Path where the output video will be saved
 
-est_time_tracker = 5  # Number of frames tracked to estimate remaining time
-editmode = False  # Flag to determine if the script is in edit mode
-audiofile_path = "edit_audio.mp3"  # Path to the audio file for the video
-edit_fps = 8  # Frames per second for edited video
-audio_speed = "0.75"  # Speed multiplier for audio playback
-video_speed = "1.0"  # Speed multiplier for video playback
-progress_bar_length = 60 # Number of characters in progress bar
-use_original_seed = False # Determines whether every frame will use the original seed image as the image input instead of previous frame.
+EST_TIME_TRACKER = 5  # Number of frames tracked to estimate remaining time
+PROGRESS_BAR_LENGTH = 60 # Number of characters in progress bar
+
+# Constants for noiseshift equation: y = 
+NOISESHIFT_C = 0.2
+NOISESHIFT_K = 0.1
+NOISESHIFT_H = 0.5
 
 #endregion
 
@@ -44,6 +43,7 @@ noise_amps = []  # List of noise amplitudes for each prompt
 changes = []  # List of indices where prompts change
 styles = []  # List of styles corresponding to each prompt
 fps = 0  # Frames per second for the video
+use_original_seed = False # Determines whether every frame will use the original seed image as the image input instead of previous frame.
 
 # counters
 count1 = 1  # Counter for prompts
@@ -118,6 +118,8 @@ def clearOutput():
         os.makedirs("output/frames")
     if not os.path.exists(f"output-zips"):
         os.makedirs("output-zips")
+    if not os.path.exists(f"input"):
+        os.makedirs("input")
 
 def setCD():
     """Set the current working directory to the script's directory."""
@@ -131,6 +133,7 @@ def get_seed_path():
     """Get the path to the seed image from the user."""
 
     global image_path
+    subprocess.run(["open", "input"])
     input("Enter seed image in folder window. Press enter when done.")
 
     for file in os.listdir('input'):
@@ -146,9 +149,9 @@ def get_resolution():
 
     global resolution_x, resolution_y, resolution
     print("Please enter desired resolution (width x height). Here are some preset values for convenience:\n - Potato: 144 x 144\n - Low: 256 x 256\n - Default: 512 x 512\n - High: 1024 x 1024\n - 16:9: 1400 x 900\n - 1080p: 1920 x 1080\n - Very High: 2048 x 2048\n - Mac Display: 2560 x 1664\n - 4k: 3840 x 2160")
-    resolution = input(f"Enter resolution (leave blank for {default_resolution}): ")
+    resolution = input(f"Enter resolution (leave blank for {DEFAULT_RESOLUTION}): ")
     if resolution == "":
-        resolution = default_resolution
+        resolution = DEFAULT_RESOLUTION
     resolution_x = int(resolution.split(" x ")[0])
     resolution_y = int(resolution.split(" x ")[1])
 
@@ -159,17 +162,17 @@ def get_prompts_styles_denoisers_durations():
     prompts.append(input(f"Prompt {count1}: "))
     while True:
         print("Select style: Either select presets with their numbers separated by spaces or input a custom style.")
-        for i in range(len(style_presets)):
-            print("  " + str(i+1) + ". " + style_presets[i])
+        for i in range(len(STYLE_PRESETS)):
+            print("  " + str(i+1) + ". " + STYLE_PRESETS[i])
         style = input(f"Style {count1}: ")
         if(style):
             if style[0].isdigit():
                 style_list = style.split(" ")
                 style = ""
                 for i in range(len(style_list)):
-                    for j in range(len(style_presets)):
+                    for j in range(len(STYLE_PRESETS)):
                         if style_list[i] == str(j+1):
-                            style += style_presets[j] + ", "
+                            style += STYLE_PRESETS[j] + ", "
                 style = style[:-2]
             styles.append(style)
             print("Style(s): " + style)
@@ -178,9 +181,9 @@ def get_prompts_styles_denoisers_durations():
             styles.append("")
 
         duration = input("Section Length (seconds): ")
-        timestamps.append(int(duration) if duration else default_duration)
-        noise_amp = input(f"Noise Amp (blank for default {default_denoising_strength}): ")
-        noise_amps.append(float(noise_amp) if noise_amp else default_denoising_strength)
+        timestamps.append(int(duration) if duration else DEFAULT_DURATION)
+        noise_amp = input(f"Noise Amp (blank for default {DEFAULT_DENOISING_STRENGTH}): ")
+        noise_amps.append(float(noise_amp) if noise_amp else DEFAULT_DENOISING_STRENGTH)
 
         video_length += timestamps[count1-1]
         count1 += 1
@@ -195,22 +198,22 @@ def get_fps_steps():
     """Get other parameters like FPS and steps for image generation."""
     
     global fps, total_frames, generation_start_time, steps
-    fps_str = input(f"Frames per second (blank for {default_fps}): ")
+    fps_str = input(f"Frames per second (blank for {DEFAULT_FPS}): ")
     if fps_str:
         fps = int(fps_str)
     else:
-        fps = default_fps
+        fps = DEFAULT_FPS
 
-    steps_str = input(f"Steps (blank for {default_steps}): ")
+    steps_str = input(f"Steps (blank for {DEFAULT_STEPS}): ")
     if steps_str:
         steps = int(steps_str)
     else:
-        steps = default_steps
+        steps = DEFAULT_STEPS
 
     user_input = input("Press any key to disable seed incrementing, otherwise enter: ")
     if(user_input):
-        global use_original_seed
-        use_original_seed = True
+        global USE_ORIGINAL_SEED
+        USE_ORIGINAL_SEED = True
 
     total_frames = fps * video_length
     generation_start_time = time.time()
@@ -250,13 +253,13 @@ def generate_image(index, prompt, style, seed_path, noise_amp):
         seed_image_bytes = seed_image_file.read()
         seed_image_base64 = base64.b64encode(seed_image_bytes).decode("utf-8")
 
-    global progress_bar_length, estimated_time_remaining_str
+    global PROGRESS_BAR_LENGTH, estimated_time_remaining_str
     sys.stdout.write(f"\033[{3}A")
     sys.stdout.write(f"\033[{3}K")
     percent = index / total_frames * 100
-    filled_length = int(progress_bar_length * index // total_frames)
-    bar = '█' * filled_length + '-' * (progress_bar_length - filled_length)
-    sys.stdout.write(f'\nPrompt: {prompt}        Style: {style}\n|{bar}| {percent:.2f}% Complete - Frame: {index}/{total_frames}\nEstimated time remaining: {estimated_time_remaining_str}                                   ')
+    filled_length = int(PROGRESS_BAR_LENGTH * index // total_frames)
+    bar = '█' * filled_length + '-' * (PROGRESS_BAR_LENGTH - filled_length)
+    sys.stdout.write(f'\nPrompt: {prompt}        Style: {style}\n|{bar}| {percent:.2f}% Complete\nFrame: {index}/{total_frames} - Estimated time remaining: {estimated_time_remaining_str}                                   ')
     sys.stdout.flush()
 
     # Prepare request data
@@ -264,9 +267,9 @@ def generate_image(index, prompt, style, seed_path, noise_amp):
         "prompt": "Very detailed, photo-realistic quality. Sharp Image. Transition image into an image of a " + prompt + " as if it were the next frame in a video. Slightly more " + style,
         "negative_prompt": "Blurry and fuzzy. More saturated. Change image. Blend quickly and abruptly. Simple.",
         "init_images": [seed_image_base64],
-        "denoising_strength": noise_amp + noiseshift,
+        "denoising_strength": noiseshift,
         "steps": steps,
-        "cfg_scale": cfg_scale,
+        "cfg_scale": CFG_SCALE,
         "width": resolution_x,
         "height": resolution_y,
 
@@ -299,14 +302,14 @@ def generate_image(index, prompt, style, seed_path, noise_amp):
 
         frames_left = total_frames - index
         sum = elasped_time
-        for i in range(index - est_time_tracker + 1, index):
+        for i in range(index - EST_TIME_TRACKER + 1, index):
             if(i > -1):
                 sum += frame_times[i]
 
-        if(index < est_time_tracker):
+        if(index < EST_TIME_TRACKER):
             avg_time_per_frame = sum / (index+1)
         else: 
-            avg_time_per_frame = sum / est_time_tracker
+            avg_time_per_frame = sum / EST_TIME_TRACKER
 
         estimated_time_remaining = int(frames_left * avg_time_per_frame)
         estimated_time_remaining_str = str(estimated_time_remaining) + " seconds."
@@ -318,28 +321,39 @@ def generate_image(index, prompt, style, seed_path, noise_amp):
     else:
         print(f"Error generating image: {response.text}")
 
+def noiseShift(x, noise_amp):
+    """Adjust noiseshift based on function"""
+
+    global noiseshift, NOISESHIFT_C, NOISESHIFT_K, NOISESHIFT_H
+
+    noiseshift = noise_amp - (noise_amp - NOISESHIFT_C) * pow(2.71828, -NOISESHIFT_K * (x - NOISESHIFT_H))
+
+
 def generate_images():
     """Generate a series of images based on the collected prompts and parameters."""
 
     global noiseshift, count2, index
     print("\n\n")
 
+    count = 0
     for i in range(total_frames):
         if count2 < len(changes) and i == changes[count2]:
-            if(noise_amps[index] + noiseshift < 0.75): noiseshift += (noise_amps[count2] - default_denoising_strength)
             count2 += 1
-
-        if(use_original_seed): seed_num = 0
+            count = 0
+        
+        noiseShift(count, noise_amps[index])
+        if(USE_ORIGINAL_SEED): seed_num = 0
         else: seed_num = i
 
         generate_image(i, prompts[index], styles[index], f"output/frames/frame_{seed_num}.png", noise_amps[index])
 
         if i == changes[index]:
             index += 1
+        count += 1
     
     sys.stdout.write(f"\033[{2}A")
-    bar = '█' * progress_bar_length
-    sys.stdout.write(f'\r|{bar}| {100:.2f}% Complete - Frame: {total_frames}/{total_frames}')
+    bar = '█' * PROGRESS_BAR_LENGTH
+    sys.stdout.write(f'\r|{bar}| {100:.2f}% Complete')
     sys.stdout.flush()
     print("\n")
 #endregion
@@ -425,7 +439,7 @@ def zip_folder(folder_path, output_zip_path):
 def open_directory():
     """Open the output directory in Finder (macOS)."""
 
-    path = os.path.abspath(output_path)
+    path = os.path.abspath(OUTPUT_PATH)
     subprocess.run(['osascript', '-e', f'tell application "Finder" to open POSIX file {path}'])
     print("ZIP file created successfully: " + os.path.abspath(f"output-zips/{date}.zip"))
 #endregion
@@ -445,9 +459,4 @@ def main():
     open_video_system_player()
     stop_local_server(False)
 
-while True:
-    main()
-    if input("Press enter to use again, or press any key to exit."):
-        break
-print("Thanks for using!")
-exit()
+main()
