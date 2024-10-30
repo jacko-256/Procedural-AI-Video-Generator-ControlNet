@@ -13,7 +13,7 @@ import psutil # type: ignore
 # region CHANGE PARAMETERS
 
 CFG_SCALE = 25  # Configuration scale for image generation
-STYLE_PRESETS = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Futurism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
+STYLE_PRESETS = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", "Fauvism", "Dadaism", "Transcendental Painting Group", "Constructivism", "Japanese Print Art", "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat"]  # List of style presets
 DEFAULT_DENOISING_STRENGTH = 0.45  # Default denoising strength for image generation
 DEFAULT_FPS = 8  # Default frames per second for video generation
 DEFAULT_STEPS = 30  # Default number of steps for image generation
@@ -24,7 +24,7 @@ OUTPUT_PATH = "output-zips"  # Path where the output video will be saved
 EST_TIME_TRACKER = 5  # Number of frames tracked to estimate remaining time
 PROGRESS_BAR_LENGTH = 60 # Number of characters in progress bar
 
-# Constants for noiseshift equation: y = 
+# Constants for noiseshift equation
 NOISESHIFT_C = 0.2
 NOISESHIFT_K = 0.1
 NOISESHIFT_H = 0.5
@@ -212,8 +212,8 @@ def get_fps_steps():
 
     user_input = input("Press any key to disable seed incrementing, otherwise enter: ")
     if(user_input):
-        global USE_ORIGINAL_SEED
-        USE_ORIGINAL_SEED = True
+        global use_original_seed
+        use_original_seed = True
 
     total_frames = fps * video_length
     generation_start_time = time.time()
@@ -342,7 +342,7 @@ def generate_images():
             count = 0
         
         noiseShift(count, noise_amps[index])
-        if(USE_ORIGINAL_SEED): seed_num = 0
+        if(use_original_seed): seed_num = 0
         else: seed_num = i
 
         generate_image(i, prompts[index], styles[index], f"output/frames/frame_{seed_num}.png", noise_amps[index])
@@ -457,6 +457,13 @@ def main():
     zip_folder("output",f"output-zips/{date}")
     open_directory()
     open_video_system_player()
-    stop_local_server(False)
+    stop_local_server()
 
-main()
+while True:
+    main()
+    user_input = input("Press enter to generate more videos or press any key and enter to exit.")
+    if(user_input):
+        break
+
+print("Thanks for using!")
+exit()
