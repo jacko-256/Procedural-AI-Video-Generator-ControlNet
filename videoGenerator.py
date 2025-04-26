@@ -58,7 +58,6 @@ PROGRESS_BAR_LENGTH = 60 # Number of characters in progress bar
 NOISESHIFT_C = 0.1  #
 NOISESHIFT_K = 0.2  # Constants for noiseshift equation
 NOISESHIFT_H = -1   #
-MINIMUM_DENOISE_STRENGTH = 0.35 # Prevents denoising strength from getting lower than this value
 
 # Variables
 # Image Generation
@@ -72,10 +71,11 @@ styles = []       # List of styles corresponding to each prompt
 fps = 0           # Frames per second for the video
 cfg_scale = 0     # Importance of prompt
 use_original_seed = False # Determines whether every frame will use the original seed image as the image input instead of previous frame.
-mask_base64 = 0   # Only edits non-transparent parts of seed image
+mask_base_64 = 0  # Mask for image gen
 upscale = True    # Interpolate frames flag (increases fps)
 upscale_fps = 0   # How many frames are interpolated
 loop = True       # If true, adds the seed image as the last frame and briefly interpolates the last frame to it, creating a subtle loop effect
+minimum_denoise_strength = 0.35 # Prevents denoising strength from getting lower than this value
 
 # Miscellaneous
 # counters
@@ -110,6 +110,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         # SETUP
         super().__init__()
         clearOutput() # Erases previously generated frames except frame_0
+        check_model()
 
         self.server_ready_flag = False
         self.pivot_widgets = []
@@ -169,6 +170,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         res_incr_upscale_layout.addWidget(self.loop)
 
         # FPS SLIDER
+        self.fps_minnoise_layout = QtWidgets.QVBoxLayout()
         self.fps_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.fps_slider.setMinimum(1)
         self.fps_slider.setMaximum(60)
@@ -176,7 +178,22 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         self.fps_label = QtWidgets.QLabel(f"FPS: {DEFAULT_FPS}")
         self.fps_slider.valueChanged.connect(lambda val: self.fps_label.setText(f"FPS: {val}"))
 
+        # MINIMUM DENOISE SLIDER
+        global minimum_denoise_strength
+        self.min_denoise_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.min_denoise_slider.setMinimum(1)
+        self.min_denoise_slider.setMaximum(100)
+        self.min_denoise_slider.setValue(int(minimum_denoise_strength*100))
+        self.min_denoise_label = QtWidgets.QLabel(f"Min. Denoise Strength: {minimum_denoise_strength}")
+        self.min_denoise_slider.valueChanged.connect(lambda val: self.min_denoise_label.setText(f"Min. Denoise Strength: {val/100}"))
+
+        self.fps_minnoise_layout.addWidget(self.fps_label)
+        self.fps_minnoise_layout.addWidget(self.fps_slider)
+        self.fps_minnoise_layout.addWidget(self.min_denoise_label)
+        self.fps_minnoise_layout.addWidget(self.min_denoise_slider)
+
         # STEPS SLIDER
+        self.steps_cfg_layout = QtWidgets.QVBoxLayout()
         self.steps_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.steps_slider.setMinimum(1)
         self.steps_slider.setMaximum(100)
@@ -191,6 +208,11 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         self.cfg_slider.setValue(DEFAULT_CFG_SCALE)
         self.cfg_label = QtWidgets.QLabel(f"CFG Scale: {DEFAULT_CFG_SCALE}")
         self.cfg_slider.valueChanged.connect(lambda val: self.cfg_label.setText(f"CFG Scale: {val}"))
+
+        self.steps_cfg_layout.addWidget(self.steps_label)
+        self.steps_cfg_layout.addWidget(self.steps_slider)
+        self.steps_cfg_layout.addWidget(self.cfg_label)
+        self.steps_cfg_layout.addWidget(self.cfg_slider)
 
         # Frame-Specific Parameters:
         #
@@ -233,16 +255,19 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         download_button = QPushButton("Download Video")
         open_gallery_button = QPushButton("Open Gallery")
         show_frames_button = QPushButton("Show Frames")
+        open_debug_button = QPushButton("Open Debug Log")
 
         # Adds the buttons to the horizontal layout
         button_layout.addWidget(download_button)
         button_layout.addWidget(open_gallery_button)
         button_layout.addWidget(show_frames_button)
+        button_layout.addWidget(open_debug_button)
 
         # Connects button actions to functions
         download_button.clicked.connect(self.download_video)
         open_gallery_button.clicked.connect(self.open_gallery)
         show_frames_button.clicked.connect(self.show_frames)
+        open_debug_button.clicked.connect(self.open_log)
         
         for i in range(0, len(DEFAULT_PROMPTS)):
             self.add_pivot(DEFAULT_PROMPTS[i], DEFAULT_STYLE_NUMS[i]) # Auto-add first pivot
@@ -250,12 +275,9 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         # Adds widgets to left panel window
         for element in [ # List is written so layout matches window
             self.seed_path_label, self.select_seed_button,
-            res_incr_upscale_layout,
-            self.fps_label, self.fps_slider, 
-            self.steps_label, self.steps_slider, 
-            self.cfg_label, self.cfg_slider,
-            QtWidgets.QLabel("Pivots:"), self.pivot_list, 
-            pivot_button_layout, self.generate_button, 
+            res_incr_upscale_layout, self.fps_minnoise_layout, 
+            self.steps_cfg_layout, QtWidgets.QLabel("Pivots:"), 
+            self.pivot_list, pivot_button_layout, self.generate_button, 
             self.progress_layout, button_layout
         ]:
             if isinstance(element, QWidget): left_panel.addWidget(element)
@@ -454,7 +476,10 @@ class VideoGeneratorUI(QtWidgets.QWidget):
                 shutil.copy(RESIZED_SEED_PATH, f'{FRAME_PATH}/frame_{total_frames + 1}.png')
                 total_frames += 1
                 generated_frames += 1
-            if upscale and fps < upscale_fps: interpolate_frames()
+            if upscale and fps < upscale_fps: 
+                self.generate_button.setEnabled(False)
+                interpolate_frames()
+                self.generate_button.setEnabled(True)
             self.reset()
         else:
             generating_video_flag = True
@@ -502,6 +527,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
             "resolution_x": width,
             "resolution_y": height,
             "fps": self.fps_slider.value(),
+            "minimum_denoise_strength": self.min_denoise_slider.value() / 100,
             "steps": self.steps_slider.value(),
             "cfg_scale": self.cfg_slider.value(),
             "use_original_seed": self.use_original_seed_checkbox.isChecked(),
@@ -521,12 +547,13 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         inputs = self.collect_inputs() # Helper method that parses input data (currently in UI elements) into usable data structures
 
         global resolution_x, resolution_y, fps, steps, cfg_scale, upscale, upscale_fps, loop # import global vars
-        global prompts, styles, noise_amps, timestamps, total_frames, use_original_seed
+        global prompts, styles, noise_amps, timestamps, total_frames, use_original_seed, minimum_denoise_strength
 
         # Assign global vars to inputs within the UI
         resolution_x = int(inputs["resolution_x"])
         resolution_y = int(inputs["resolution_y"])
         fps = inputs["fps"]
+        minimum_denoise_strength = inputs["minimum_denoise_strength"]
         steps = inputs["steps"]
         cfg_scale = inputs["cfg_scale"]
         prompts = inputs["prompts"]
@@ -547,6 +574,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         self.show_frame()
 
         generate_images()  # Use stable diffusion and controlnet to generate all frames (TAKES VERY LONG)
+        apply_masks()
         self.toggle_generation_thread()
 
     def download_video(self):
@@ -563,6 +591,11 @@ class VideoGeneratorUI(QtWidgets.QWidget):
     def show_frames(self):
         """Opens folder to current frames being generated"""
         open_finder(FRAME_PATH) # Calls helper method
+    
+    def open_log(self):
+        """Opens debug log text file"""
+        print("opening debug log")
+        subprocess.run(['open', 'debug.log'])
 
     def reset(self):
         """Resets program vars after interruption or completion so you don't need to reopen every time.
@@ -593,6 +626,19 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         event.accept()
 
 # INITIALIZATION
+def check_model():
+    """Downloads model if not already present"""
+
+    print("checking model status")
+    model_path = 'stable-diffusion-webui/extensions/sd-webui-controlnet/models/control_sd15_hed.pth'
+    if not os.path.exists(model_path):
+        print("downloading model")
+        url = "https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_hed.pth"
+        try:
+            subprocess.run(['curl', '-L', url, '-o', model_path])
+        except Exception as e:
+            print("Download failed: " + e)
+
 def stop_local_server():
     """Stops controlnet server through PID. Tries to quite gracefully but forces if unable to"""
 
@@ -663,6 +709,34 @@ def clearOutput():
     if not os.path.exists(f"input"):
         os.makedirs("input")
 
+def create_mask(path):
+    """Creates a mask if image has an alpha channel. Only changes image in non-transparent areas."""
+
+    global alpha, mask_base64
+    img = Image.open(path).convert("RGBA")
+    alpha = np.array(img.split()[-1])  # Isolates alpha channel
+    mask_bin = (alpha > 0).astype(np.uint8) * 255  # Binarizes the output
+    mask_image = Image.fromarray(mask_bin).convert("L")
+    buffered = BytesIO()
+    mask_image.save(buffered, format="PNG")
+    mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8") # Encodes in base64
+
+def apply_masks():
+    """Post-processing that makes sure all images maintain alpha channel"""
+
+    for frame in os.listdir(FRAME_PATH):
+        apply_mask(f'{FRAME_PATH}/{frame}')
+
+def apply_mask(image_path):
+    """Applies alpha mask to image at image_path"""
+
+    global alpha
+    img = Image.open(image_path).convert("RGBA")
+    img_np = np.array(img)
+    img_np[..., 3] = alpha
+    result = Image.fromarray(img_np, mode="RGBA")
+    result.save(image_path, tranparency=0)
+
 # IMAGE GENERATION
 def generate_image(prompt, style, seed_path):
     """Generate a single image based on the provided parameters."""
@@ -690,6 +764,7 @@ def generate_image(prompt, style, seed_path):
                     "enabled": True,
                     "image": seed_image_base64,
                     "weight": PROMPT_WEIGHT,
+                    "mask": mask_base64,
                     "module": "openpose_full",
                     "model": "control_sd15_hed [fef5e48e]",
                     }
@@ -704,14 +779,10 @@ def generate_image(prompt, style, seed_path):
         if response.status_code == 200 and "images" in response_data: # If server responds...
             image_base64 = response_data["images"][0]
             image_bytes = base64.b64decode(image_base64)
-            # Save generated frame to folder
-            # img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
-            # r, g, b, = img.convert("RGB").split()
-            # img = Image.merge("RGBA", (r, g, b, alpha))
-            # output = io.BytesIO()
-            # img.save(output, format="PNG")
-            with open(f"{FRAME_PATH}/frame_{generated_frames + 1}.png", "wb") as image_file:
-                image_file.write(image_bytes)
+            image_path = f"{FRAME_PATH}/frame_{generated_frames + 1}.png"
+            with open(image_path, "wb") as image_file:
+                image_file.write(image_bytes) # Save generated frame to folder
+            apply_mask(image_path)
         else:
             print(f"Error generating image: {response.text}")
     except Exception as e:
@@ -721,18 +792,18 @@ def noiseShift(x, noise_amp):
     """Adjust noiseshift based on function
        FORMULA FOR DENOISING STRENGTH: N(x, n) = n - [(n - 0.1) * e^(-0.2[x - 0.5])] where n is pivot's denoise strength, x is current frame of THAT pivot, and N is denoising strength."""
 
-    global denoising_strength
+    global denoising_strength, minimum_denoise_strength
     print(f'x: {x}')
     denoising_strength = noise_amp - (noise_amp - NOISESHIFT_C) * pow(2.71828, -NOISESHIFT_K * (x - NOISESHIFT_H))
-    if denoising_strength < MINIMUM_DENOISE_STRENGTH:
-        denoising_strength = MINIMUM_DENOISE_STRENGTH
+    if denoising_strength < minimum_denoise_strength:
+        denoising_strength = minimum_denoise_strength
 
 def generate_images():
     """Generate a series of images based on the collected prompts and parameters."""
 
     global denoising_strength, pivot_num, total_frames, generated_frames, generation_start_time
     print("\n\n")
-    # create_mask(RESIZED_SEED_PATH)
+    create_mask(RESIZED_SEED_PATH)
     generation_start_time = time.time()
 
     while generated_frames < total_frames:
@@ -755,18 +826,6 @@ def generate_images():
 
         # Increment pivot counter and reset frame counter if a new pivot is starting
         if generated_frames == timestamps[pivot_num]: pivot_num += 1
-        
-def create_mask(path):
-    """Creates a mask if image has an alpha channel. Only changes image in non-transparent areas."""
-
-    global mask_base64, alpha
-    img = Image.open(path).convert("RGBA")
-    alpha = np.array(img.split()[-1])  # Isolates alpha channel
-    mask_bin = (alpha > 0).astype(np.uint8) * 255  # Binarizes the output
-    mask_image = Image.fromarray(mask_bin).convert("L")
-    buffered = BytesIO()
-    mask_image.save(buffered, format="PNG")
-    mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8") # Encodes in base64
 
 # UPSCALING
 def interpolate_frames():
@@ -814,19 +873,12 @@ def interpolate_frame(frame_1_path, frame_2_path, new_frame_path):
         '-1', frame_2_path,      # second frame
         '-o', new_frame_path     # output frame
     ]
-    # with open(new_frame_path) as image_file:
-    #     image_bytes = image_file.read()
-    #     img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
-    #     r, g, b = img.split()
-    #     img = Image.merge("RGBA", (r, g, b, alpha))
-    #     output = io.BytesIO()
-    #     img.save(output, format="PNG")
-    #     image_file.write(output.getvalue())
     try:
         subprocess.run(command, check=True)
         print("Interpolation complete!")
     except subprocess.CalledProcessError as e:
         print("Error during interpolation:", e)
+    apply_mask(new_frame_path)
 
 # FILE MANAGEMENT
 def output():
