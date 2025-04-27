@@ -1,10 +1,10 @@
 # INSTANTIATION
 # Imports
 # type: ignore
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtGui import QMovie, QPixmap
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QFileDialog, QWidget, QLayout, QLabel, QVBoxLayout
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QFileDialog, QWidget, QLayout, QLabel
+from PyQt5.QtCore import Qt
 
 from PIL import Image
 import threading
@@ -18,7 +18,8 @@ import time
 import psutil
 import shutil
 import numpy as np
-import io
+import imageio
+import re
 from io import BytesIO
 import traceback
 
@@ -30,21 +31,21 @@ ARCHIVE_PATH = 'output-archive'                        # Folder with all previou
 FRAME_PATH = 'output/frames'                           # Folder where frames are added
 SEED_INPUT_PATH = 'output/seed_frame.png'              # Previously used seed image (not resized) (default seed path)
 RESIZED_SEED_PATH = f'{FRAME_PATH}/frame_0.png'        # Frame 0 of output (seed image gets resized here)
-RIFE_PATH = 'RIFE-NCNN_Interpolation/rife-ncnn-vulkan' # Frame interpolation software (C++ library)
+RIFE_PATH = 'bin/RIFE-NCNN_Interpolation/rife-ncnn-vulkan' # Frame interpolation software (C++ library)
 
 # Video Generation:
 STYLE_PRESETS = ["Photo Realistic", "Academic Art Still Life", "Surrealism", "Cubism", "Impressionism", 
                  "Fauvism", "Dadaism", "Pixel Art", "Charcoal Still Life", "Japanese Print Art", 
                  "Abstractism Wassily Kandinsky", "Jean-Michel Basquiat", "Psychological Horror", 
-                 "Dark Fantasy", "Psychedelic", "Grafitti", "3D", "Minimalist", "Anime", 
-                 "Pixel Art", "Baroque", "Sci-Fi", "Transcendental Painting Group"] # Style presets (dropdown menu)
+                 "Dark Fantasy", "Psychedelic", "Grafitti", "3D", "Minimalist", "Anime", "Pixel Art", 
+                 "Baroque", "Sci-Fi", "Transcendental Painting Group"] # Style presets (dropdown menu)
 
-DEFAULT_DENOISING_STRENGTH = 0.55   # Default denoising strength for image generation
-DEFAULT_FPS = 10                    # Default frames per second for video generation
+DEFAULT_DENOISING_STRENGTH = 0.5    # Default denoising strength for image generation
+DEFAULT_FPS = 12                    # Default frames per second for video generation
 DEFAULT_STEPS = 30                  # Default number of steps
 DEFAULT_CFG_SCALE = 25              # Configuration scale (how much model follows prompt)
-DEFAULT_RESOLUTION = [512, 512]     # Default resolution for generated images
-DEFAULT_DURATION = 20               # Default frames between pivots, also is # of context frames for ETA
+DEFAULT_RESOLUTION = [640, 640]     # Default resolution for generated images
+DEFAULT_DURATION = 24               # Default frames between pivots, also is # of context frames for ETA
 DEFAULT_UPSCALED_FPS = 60           # Upscaled FPS
 PROMPT_WEIGHT = 0.6                 # Amount that ControlNet favors consisteny over prompt (lower value -> more prompt weight)
 
@@ -84,7 +85,7 @@ generated_frames = 0 # How many frames have been generated
 
 # timers
 generation_start_time = 0  # Start time for image generation
-date = ""  # Date string for naming output files
+date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  # Date string for naming output files
 
 # other data
 frame_times = []  # List to track generation times for each frame
@@ -96,6 +97,7 @@ alpha = 0 # Mask that keeps transparency of seed image
 generating_video_flag = False #
 upscaling_flag = False        # These are just self-explanatory
 play_gif = True               #
+downloading_model = False     #
 display_image_path = RESIZED_SEED_PATH # Tracks the path that the frame display is currently showing
 
 # USER INTERFACE
@@ -110,7 +112,6 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         # SETUP
         super().__init__()
         clearOutput() # Erases previously generated frames except frame_0
-        check_model()
 
         self.server_ready_flag = False
         self.pivot_widgets = []
@@ -137,7 +138,6 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         self.select_seed_button.clicked.connect(self.select_seed_image) # code that runs when button clicked
 
         # RESOLUTION, SEED INCREMENT, UPSCALING, LOOP
-        print(DEFAULT_RESOLUTION)
         self.resolution_label = QtWidgets.QLabel("Resolution (x, y):")
         self.resolution_x_input = QtWidgets.QSpinBox() # RESOLUTION INPUT FIELD
         self.resolution_y_input = QtWidgets.QSpinBox()
@@ -231,7 +231,6 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         pivot_button_layout.addSpacing(10)
         pivot_button_layout.addWidget(self.remove_pivot_btn)
         
-
         # Processing
         # Generate Video button
         self.generate_button = QtWidgets.QPushButton("Generate Video")
@@ -291,6 +290,8 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         right_panel.addWidget(self.display_area)
 
         start_local_server()
+        self.download_thread = threading.Thread(target=self.check_model)
+        self.download_thread.start()
 
     def select_seed_image(self):
         """Opens finder dialogue and prompts user to enter an image file of file formats .png, .jpg, .jpeg.
@@ -317,6 +318,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
 
         def on_style_change(): # Creates custom style text field
             custom_style_input.setVisible(style_dropdown.currentText() == "Other")
+
         style_dropdown.currentIndexChanged.connect(on_style_change)
 
         noise_label = QtWidgets.QLabel(f"Denoise Strength: {DEFAULT_DENOISING_STRENGTH:.2f}")
@@ -391,10 +393,11 @@ class VideoGeneratorUI(QtWidgets.QWidget):
             try:
                 response = requests.get("http://127.0.0.1:7860/sdapi/v1/sd-models", timeout=2)
                 if response.status_code == 200:
-                    print("Server is ready!")
+                    print("Server is ready! Enabling video generation.")
                     self.server_ready_flag = True  # Prevent future triggers
                     self.start_updates()
-                    self.generate_button.setEnabled(True) # Enable Generate Video button and allow image generation
+                    if not downloading_model: 
+                        self.generate_button.setEnabled(True) # Enable Generate Video button and allow image generation
             except:
                 pass
     
@@ -420,7 +423,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         else: progress = int(min(generated_frames / total_frames * 100, 100)) # progress is (frames/total frames)*100 which is 0-100
         self.progress_bar.setValue(progress) # Update bar UI  
         if upscaling_flag:
-            self.progress_bar_label.setText(f'100% - Frame {generated_frames}/{total_frames} - Upscaling...')
+            self.progress_bar_label.setText(f'100% - Frame {generated_frames}/{total_frames + 2} - Upscaling...')
         else:
             self.progress_bar_label.setText(f'{progress}% - Frame {generated_frames}/{total_frames} - ETA: {ETA_str} - Denoise: {denoising_strength:.3f}')
     
@@ -434,7 +437,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
             if new_frame != display_image_path:
                 display_image_path = new_frame
                 self.show_frame()
-                print(f"Updating display to {display_image_path}")
+                print(f"Updated image display to {display_image_path}")
         else:
             self.progress_bar.setValue(0)
             self.progress_bar_label.setText(f"0% Complete - Frame -/-")
@@ -458,7 +461,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
     def show_generated_gif(self):
         """Call this after generation is complete to show the looping GIF."""
 
-        print("Showing gif")
+        print("Updating display to output GIF")
         self.generated_gif = QMovie(OUTPUT_GIF_PATH)
         self.display_area.setMovie(self.generated_gif)
         self.generated_gif.setScaledSize(self.display_area.size())
@@ -542,11 +545,12 @@ class VideoGeneratorUI(QtWidgets.QWidget):
 
     def generate_video_ui(self):
         """Manages methods outside of class to generate frame-by-frame AI video based off the data inputted in the UI"""
-        
+                
+        clearOutput()
         self.generate_button.setText("Interrupt Generation") # Disables generate video button to prevent mirror generations
         inputs = self.collect_inputs() # Helper method that parses input data (currently in UI elements) into usable data structures
 
-        global resolution_x, resolution_y, fps, steps, cfg_scale, upscale, upscale_fps, loop # import global vars
+        global resolution_x, resolution_y, fps, steps, cfg_scale, upscale, upscale_fps, loop, generation_start_time # import global vars
         global prompts, styles, noise_amps, timestamps, total_frames, use_original_seed, minimum_denoise_strength
 
         # Assign global vars to inputs within the UI
@@ -565,16 +569,23 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         loop = inputs["loop"]
         upscale_fps = inputs["upscale_fps"]
         total_frames = timestamps[len(timestamps)-1]
+        generation_start_time = time.time()
 
         # Resizes seed image to desired resolution so it flows with rest of frames in the video
         img = Image.open(SEED_INPUT_PATH)
         new_size = (resolution_x, resolution_y)
         resized_img = img.resize(new_size)
         resized_img.save(RESIZED_SEED_PATH)
+        create_mask(RESIZED_SEED_PATH)
+
+        if resized_img.mode == 'RGBA':
+            r, g, b, a = resized_img.split()
+            white_background = Image.new('RGB', resized_img.size, (255, 255, 255))
+            white_background.paste(Image.merge('RGB', (r, g, b)), (0, 0), a)
+            white_background.save(RESIZED_SEED_PATH)
         self.show_frame()
 
         generate_images()  # Use stable diffusion and controlnet to generate all frames (TAKES VERY LONG)
-        apply_masks()
         self.toggle_generation_thread()
 
     def download_video(self):
@@ -594,7 +605,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
     
     def open_log(self):
         """Opens debug log text file"""
-        print("opening debug log")
+        print("Opening debug log")
         subprocess.run(['open', 'debug.log'])
 
     def reset(self):
@@ -603,6 +614,7 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         
         global pivot_num, generated_frames, ETA_str, generating_video_flag, upscaling_flag, total_frames, play_gif, display_image_path, date
         output()           # Saves video and gif to output folder
+        apply_masks()
         date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         create_text_file() # Creates file that stores all parameters used to generate that video
         shutil.copytree('output', f'{ARCHIVE_PATH}/{date}')   # Copies video and gif to archive folder for easy access of previous generations
@@ -616,29 +628,32 @@ class VideoGeneratorUI(QtWidgets.QWidget):
         self.generate_button.setText("Generate Video")
         total_frames = 0
         display_image_path = RESIZED_SEED_PATH
-        clearOutput()
+    
+    def check_model(self):
+        """Downloads model if not already present"""
+
+        print("Checking model status...")
+        model_path = 'bin/stable-diffusion-webui/extensions/sd-webui-controlnet/models/control_sd15_hed.pth'
+        if not os.path.exists(model_path):
+            print("Downloading model...")
+            self.generate_button.setText("Downloading Model... Open debug log for info")
+            url = "https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_hed.pth"
+            try:
+                subprocess.run(['curl', '-L', url, '-o', model_path])
+            except Exception as e:
+                print("Download failed: " + e)
+            self.generate_button.setText("Generate Video")
+            self.generate_button.setEnabled(True)
+        print(f"Model located at: {model_path}")
             
     def closeEvent(self, event):
         """Gracefully closes the server as program quits to save 4-6 gigabytes of memory (VERY IMPORTANT)"""
 
-        print("Shutting down...")
+        print("Shutting down program...")
         stop_local_server() # Stops server
         event.accept()
 
 # INITIALIZATION
-def check_model():
-    """Downloads model if not already present"""
-
-    print("checking model status")
-    model_path = 'stable-diffusion-webui/extensions/sd-webui-controlnet/models/control_sd15_hed.pth'
-    if not os.path.exists(model_path):
-        print("downloading model")
-        url = "https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_hed.pth"
-        try:
-            subprocess.run(['curl', '-L', url, '-o', model_path])
-        except Exception as e:
-            print("Download failed: " + e)
-
 def stop_local_server():
     """Stops controlnet server through PID. Tries to quite gracefully but forces if unable to"""
 
@@ -646,22 +661,17 @@ def stop_local_server():
     if server_process:
         try:
             print(f"Attempting to stop server process group (bash PID: {server_process.pid})")
-
             parent = psutil.Process(server_process.pid)
             children = parent.children(recursive=True)
-
             # Kill child processes first
             for child in children:
                 print(f"Killing child process: {child.pid} ({child.name()})")
                 child.kill()
-
             # Then kill the parent bash process
             print(f"Killing parent process: {parent.pid} ({parent.name()})")
             parent.kill()
-
             gone, alive = psutil.wait_procs([parent] + children, timeout=5)
             print(f"Server process and children terminated.")
-
             server_process = None
         except Exception as e:
             print(f"Failed to stop server: {e}")
@@ -672,22 +682,19 @@ def start_local_server():
     """Starts the local ControlNet server for image generation without opening a browser."""
     
     global server_process, date
-    if server_process and server_process.poll() is None:
-        print("[INFO] Server is already running.")
-        stop_local_server()  # Ensure no previous server is running
     try:
         # Set environment variables to suppress browser and enable API
         env = os.environ.copy()
         env["MY_SERVER_TAG"] = "AI_IMG2VID_CONTROLNET_SERVER"
+
         server_process = subprocess.Popen(
             ["bash", "webui.sh"],
-            cwd="stable-diffusion-webui",
+            cwd="bin/stable-diffusion-webui",
             env=env,
             start_new_session=True,  # important
             bufsize=1,
             universal_newlines=True  # Ensures text output is treated as strings
         )    
-        print("Starting the ControlNet server (no browser, CUDA test skipped)...")
         print(f"Server started with PID {server_process.pid}")
     except Exception as e:
         print(f"[ERROR] Failed to start server: {e}")
@@ -695,19 +702,35 @@ def start_local_server():
 def clearOutput():
     """Clear previous output frames (1-n) and create necessary directories."""
     
-    for frame in os.listdir(FRAME_PATH):
-        full_path = os.path.join(FRAME_PATH, frame)
-        if full_path != os.path.join(FRAME_PATH, "seed_frame.png"):
-            os.remove(full_path)
-
     # These create necessary folders if first-time user or they are missing
-    if not os.path.exists(f"output"):
+    if not os.path.exists("output"):
+        print("Making directory: output")
         os.makedirs("output")
+        print(f"Making directory: {FRAME_PATH}")
         os.makedirs(FRAME_PATH)
+        starter_gif_path = 'git/starter.gif'
+        if os.path.exists(starter_gif_path): 
+            shutil.copy(starter_gif_path, OUTPUT_GIF_PATH)
+            print(f"Inserting starter gif")
+        starter_seed_path = 'git/seed.png'
+        if os.path.exists(starter_seed_path): 
+            shutil.copy(starter_seed_path, SEED_INPUT_PATH)
+            print(f"Inserting starter seed")
+            
     if not os.path.exists(ARCHIVE_PATH):
         os.makedirs(ARCHIVE_PATH)
-    if not os.path.exists(f"input"):
-        os.makedirs("input")
+        print(f"Making directory: {ARCHIVE_PATH}")
+    if not os.path.exists("input-standby"):
+        os.makedirs("input-standby")
+        print(f"Making directory: input-standby")
+    if os.path.exists('git'): # Removes git folder to save storage space
+        print(f"Removing git folder")
+        shutil.rmtree('git')
+    
+    for frame in os.listdir(FRAME_PATH):
+        full_path = os.path.join(FRAME_PATH, frame)
+        os.remove(full_path)
+
 
 def create_mask(path):
     """Creates a mask if image has an alpha channel. Only changes image in non-transparent areas."""
@@ -723,7 +746,8 @@ def create_mask(path):
 
 def apply_masks():
     """Post-processing that makes sure all images maintain alpha channel"""
-
+    
+    print("Applying alpha masks to frames.")
     for frame in os.listdir(FRAME_PATH):
         apply_mask(f'{FRAME_PATH}/{frame}')
 
@@ -735,7 +759,7 @@ def apply_mask(image_path):
     img_np = np.array(img)
     img_np[..., 3] = alpha
     result = Image.fromarray(img_np, mode="RGBA")
-    result.save(image_path, tranparency=0)
+    result.save(image_path)
 
 # IMAGE GENERATION
 def generate_image(prompt, style, seed_path):
@@ -764,7 +788,6 @@ def generate_image(prompt, style, seed_path):
                     "enabled": True,
                     "image": seed_image_base64,
                     "weight": PROMPT_WEIGHT,
-                    "mask": mask_base64,
                     "module": "openpose_full",
                     "model": "control_sd15_hed [fef5e48e]",
                     }
@@ -782,7 +805,6 @@ def generate_image(prompt, style, seed_path):
             image_path = f"{FRAME_PATH}/frame_{generated_frames + 1}.png"
             with open(image_path, "wb") as image_file:
                 image_file.write(image_bytes) # Save generated frame to folder
-            apply_mask(image_path)
         else:
             print(f"Error generating image: {response.text}")
     except Exception as e:
@@ -793,18 +815,15 @@ def noiseShift(x, noise_amp):
        FORMULA FOR DENOISING STRENGTH: N(x, n) = n - [(n - 0.1) * e^(-0.2[x - 0.5])] where n is pivot's denoise strength, x is current frame of THAT pivot, and N is denoising strength."""
 
     global denoising_strength, minimum_denoise_strength
-    print(f'x: {x}')
     denoising_strength = noise_amp - (noise_amp - NOISESHIFT_C) * pow(2.71828, -NOISESHIFT_K * (x - NOISESHIFT_H))
+
     if denoising_strength < minimum_denoise_strength:
         denoising_strength = minimum_denoise_strength
 
 def generate_images():
     """Generate a series of images based on the collected prompts and parameters."""
 
-    global denoising_strength, pivot_num, total_frames, generated_frames, generation_start_time
-    print("\n\n")
-    create_mask(RESIZED_SEED_PATH)
-    generation_start_time = time.time()
+    global denoising_strength, pivot_num, total_frames, generated_frames
 
     while generated_frames < total_frames:
         if not generating_video_flag: return # Stops video generation when interrupted
@@ -835,6 +854,7 @@ def interpolate_frames():
     frame_multiplier = int(upscale_fps / fps)
     fps = upscale_fps
     upscaling_flag = True
+
     # Reorder frames to create space for interpolated frames
     frames = [0]
     for i in range(total_frames, 0, -1):
@@ -846,12 +866,10 @@ def interpolate_frames():
     # Loops through frames until all gaps are filled.
     total_frames *= frame_multiplier
     for i in range(frame_multiplier - 1):
-        print(frames)
-        print(f"ITERATION {i+1}/{frame_multiplier}")
+        print(f'Iteration {i+1}/{frame_multiplier}\nFrames generated: {frames}')
         frames_to_add = []
         for j in range(len(frames) - 1):
             new_frame_index = frames[j] + int((frames[j + 1] - frames[j]) / 2)
-            print(f'ADDING FRAME AT {new_frame_index}')
             if new_frame_index not in frames:
                 print(f'INTERPOLATING FRAMES {frames[j]} AND {frames[j+1]} TO {new_frame_index}')
                 interpolate_frame(f'{FRAME_PATH}/frame_{frames[j]}.png', f'{FRAME_PATH}/frame_{frames[j + 1]}.png', f'{FRAME_PATH}/frame_{new_frame_index}.png')
@@ -859,7 +877,7 @@ def interpolate_frames():
         frames.extend(frames_to_add)
         frames.sort()
     interpolate_frame(f'{FRAME_PATH}/frame_1.png', f'{FRAME_PATH}/frame_3.png', f'{FRAME_PATH}/frame_2.png')
-    print(frames)
+    print(f'Interpolation completed.\nFrames generated: {frames}')
     upscaling_flag = False
     
 def interpolate_frame(frame_1_path, frame_2_path, new_frame_path):
@@ -875,12 +893,19 @@ def interpolate_frame(frame_1_path, frame_2_path, new_frame_path):
     ]
     try:
         subprocess.run(command, check=True)
-        print("Interpolation complete!")
+        print(f'Interpolation successful.')
     except subprocess.CalledProcessError as e:
         print("Error during interpolation:", e)
-    apply_mask(new_frame_path)
 
 # FILE MANAGEMENT
+def numerical_sort(value):
+    """Helper function to extract the number from a filename for sorting."""
+
+    match = re.search(r'(\d+)', value)  # Find the first number in the string
+    if match:
+        return int(match.group(1))  # Return the number as an integer for proper sorting
+    return value  # If no number is found, return the original value
+
 def output():
     """Generate the output video (.mp4) and GIF from the generated frames."""
 
@@ -889,34 +914,24 @@ def output():
         os.remove(OUTPUT_VIDEO_PATH)
     if os.path.exists(OUTPUT_GIF_PATH):
         os.remove(OUTPUT_GIF_PATH)
-    # Generates video
-    subprocess.run([
-        "ffmpeg",
-        "-framerate", str(fps),
-        "-start_number", "0",
-        "-i", f"{FRAME_PATH}/frame_%d.png",
-        "-c:v", "libx264", 
-        "-preset", "fast",
-        "-crf", "20",
-        "-pix_fmt", "yuv420p",
-        "-c:a", "aac",
-        "-b:a", "192k",
-        "-movflags", "+faststart",
-        "-loglevel", "info",
-        OUTPUT_VIDEO_PATH], 
-        check=True)
-    print("Video generated!")
 
-    # Generates GIF
-    subprocess.run([
-        "ffmpeg",
-        "-framerate", str(fps),
-        "-i", f"{FRAME_PATH}/frame_%d.png",
-        "-vf", "scale=512:-1",
-        "-r", str(fps),
-        "-loglevel", "info",
-        OUTPUT_GIF_PATH,], check=True),         
-    print(f"GIF generated!")
+    # Generate video
+    images = [os.path.join(FRAME_PATH, f) for f in os.listdir(FRAME_PATH) if f.endswith('.png')]
+    images.sort(key=numerical_sort)
+    writer = imageio.get_writer(OUTPUT_VIDEO_PATH, fps=fps)
+    for image in images:
+        writer.append_data(imageio.imread(image))
+    writer.close()
+    print(f"MP4 saved as {OUTPUT_VIDEO_PATH}")
+
+    # Generate gif
+    images = [os.path.join(FRAME_PATH, f) for f in os.listdir(FRAME_PATH) if f.endswith('.png')]
+    images.sort(key=numerical_sort)
+    frames = []
+    for image in images:
+        frames.append(imageio.imread(image))
+    imageio.mimsave(OUTPUT_GIF_PATH, frames, duration=(total_frames/fps), loop=0)
+    print(f"GIF saved as {OUTPUT_GIF_PATH}")
 
 def create_text_file():
     """Creates a text file with parameters used for the video generation [NOT CONFIRMED TO WORK YET]."""
@@ -931,6 +946,7 @@ def create_text_file():
         file.write("\nTime Elapsed: " + str(int(generation_end_time - generation_start_time)) + " seconds")
         file.write("\nVideo Length: " + str(int(total_frames / fps)) + " seconds")
         file.write("\nTotal Frames: " + str(total_frames))
+
         # pivot params
         for i in range(len(noise_amps)):
             file.write(f"\n\nSegment {i + 1} Parameters:\n - Prompt: {prompts[i]}\n - Style: {styles[i]}\n - Noise Amplifier: {noise_amps[i]}\n - Duration: {timestamps[i]}")
@@ -965,6 +981,7 @@ def update_debug_progress_bar(start_time):
     # Calculates estimated time remaining
     frames_left = total_frames - generated_frames
     sum = elapsed_time
+
     for i in range(generated_frames - DEFAULT_DURATION + 1, generated_frames):
         if i >= 0 and i < len(frame_times):
             sum += frame_times[i]
@@ -986,7 +1003,7 @@ def update_debug_progress_bar(start_time):
 if __name__ == "__main__":
     """Main method that runs everything. Called when program is ran."""
 
-    print("STARTING")
+    print(f"Launching program at {date}")
     try:
         app = QtWidgets.QApplication(pysys.argv)
         window = VideoGeneratorUI()
