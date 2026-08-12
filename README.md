@@ -1,6 +1,6 @@
 <div align="center">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtomr.GIF?raw=true" alt="GIF 2" width="380"/>
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/real_bh.GIF?raw=true" alt="GIF 1" width="380"/>
+    <img src="git/bhtomr.GIF" alt="GIF 2" width="380"/>
+    <img src="git/real_bh.GIF" alt="GIF 1" width="380"/>
 </div>
 
 # Procedural Video Generator Using ControlNet
@@ -37,7 +37,7 @@ What this will do is create a video that begins with the input image you give, a
 What I mean by incrementation is that every frame will use the previous frame as a reference, as opposed to using the original seed image. When disabled, it can yield results like:
 
 <div align="center">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/no_increment.gif?raw=true" alt="GIF 2" width="300"/>
+    <img src="git/no_increment.gif" alt="GIF 2" width="300"/>
 </div>
 
 The other parameters that are given to the generator are shown below:
@@ -70,7 +70,7 @@ It is advised to use 1-3 styles, because too many styles may cause clashes and i
 Here are GIFs of each style with the prompt: black hole acretion disc. Styles increment from left to right. Top left is style 1, the one on the right of it is 2, and so on.
 
 <div align="center">
-    <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/output.gif?raw=true" alt="" width="1000"/>
+    <img src="git/output.gif" alt="" width="1000"/>
 </div>
 
 ## Results:
@@ -78,12 +78,12 @@ Here are GIFs of each style with the prompt: black hole acretion disc. Styles in
 Here are some other cool results from this project! Files can be found in the "git" folder in the main branch.
 
 <div align="center">
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/og.GIF?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/bhtosnow.gif?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/style13.gif?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/cmiygl.gif?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/flowerboy.gif?raw=true" width="300"/>
-  <img src="https://github.com/jacko-256/Procedural-AI-Video-Generator-ControlNet/blob/main/git/igor.gif?raw=true" width="300"/>
+  <img src="git/og.GIF" width="300"/>
+  <img src="git/bhtosnow.gif" width="300"/>
+  <img src="git/style13.gif" width="300"/>
+  <img src="git/cmiygl.gif" width="300"/>
+  <img src="git/flowerboy.gif" width="300"/>
+  <img src="git/igor.gif" width="300"/>
 </div>
 
 
